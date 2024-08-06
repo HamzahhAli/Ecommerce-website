@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <%- include('components/Navbar') %>
+  <h1>Your Cart</h1>
+  <div class="page-container">
+    <div class="cart-container">
+      <% let totalPrice = 0; %>
+      <% if (cart && cart.items && cart.items.length > 0) { %>
+        <ul class="cart-items">
+          <% cart.items.forEach(item => { %>
+            <% if (item.productId && item.productId.price) { %>
+              <% totalPrice += item.productId.price * item.quantity; %>
+              <li>
+                <a href="/products/<%= item.productId._id %>" class="cart-item">
+                  <img src="<%= item.productId.imageUrl %>" alt="<%= item.productId.name %>" class="cart-image">
+                  <div class="item-details">
+                    <div class="item-name"><%= item.productId.name %></div>
+                    <div class="item-price">$<%= item.productId.price.toFixed(2) %></div>
+                    <div class="item-quantity">Quantity: <%= item.quantity %></div>
+                  </div>
+                  <a href="" class="remove-link" onclick="removeItem('<%= item.productId._id %>')">Remove</a>
+                </a>
+              </li>
+            <% } %>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <p class="empty-cart">Your cart is empty</p>
+      <% } %>
+    </div>
+    <div class="total-panel">
+      <h2>Order Summary</h2>
+      <% if (cart && cart.items && cart.items.length > 0) { %>
+        <div>
+          <% cart.items.forEach(item => { %>
+            <% if (item.productId && item.productId.price) { %>
+              <div class="order-summary-item">
+                <span><%= item.productId.name %> (x<%= item.quantity %>)</span>
+                <span>$<%= (item.productId.price * item.quantity).toFixed(2) %></span>
+              </div>
+            <% } %>
+          <% }); %>
+        </div>
+        <div class="order-summary-item"><strong>Total: $<%= totalPrice.toFixed(2) %></strong></div>
+        <button class="back-button" style="width: 100%; margin-top: 20px;">Checkout</button>
+      <% } else { %>
+        <p>No items in cart</p>
+      <% } %>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="/scripts.js"></script>
+</body>
+</html>
